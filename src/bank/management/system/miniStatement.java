@@ -12,7 +12,7 @@ public class miniStatement extends JFrame {
         setLayout(null);
 
         JLabel l1 = new JLabel();
-        l1.setBounds(20, 130, 400, 200);
+        l1.setBounds(20, 160, 400, 200);
         add(l1);
 
         JLabel bank = new JLabel("Indian Bank");
@@ -22,6 +22,14 @@ public class miniStatement extends JFrame {
         JLabel card = new JLabel();
         card.setBounds(20,80,300,20);
         add(card);
+
+        JLabel balance = new JLabel();
+        balance.setBounds(20,110,300,20);
+        add(balance);
+
+        JLabel stmt = new JLabel("The statement is shown below");
+        stmt.setBounds(20,130,500,30);
+        add(stmt);
 
 
         try {
@@ -37,25 +45,38 @@ public class miniStatement extends JFrame {
 
         try {
             conn c = new conn();
+            int bal = 0;
             ResultSet rs = c.s.executeQuery("select * From bank where pin = '"+pin+"'");
             StringBuilder resultText = new StringBuilder("<html>");
             StringBuilder updatedrs = resultText.append("<table border='1'><tr><th>Date</th><th>Type</th><th>Amount</th></tr>");
 
 
             while(rs.next()) {
-                String date = rs.getString("date"); // Assuming the column name is "date"
-                String type = rs.getString("type"); // Assuming the column name is "type"
-                double amount = rs.getDouble("amount"); // Assuming the column name is "amount"
+                String date = rs.getString("date");
+                String type = rs.getString("type");
+                double amount = rs.getDouble("amount");
 
                 updatedrs.append("<tr>")
                         .append("<td>").append(date).append("</td>")
                         .append("<td>").append(type).append("</td>")
                         .append("<td>").append(amount).append("</td>")
                         .append("</tr>");
+                    if(rs.getString("type").equals("Deposit")){
+
+                        bal += Integer.parseInt(rs.getString("amount"));
+
+                    }
+                    else if(rs.getString("type").equals("Withdraw") ) {
+
+                        bal -= Integer.parseInt(rs.getString("amount"));
+
+                    }
+                balance.setText("Your current account balance is " + bal);
 
             }
             resultText.append("</html>"); // Close the HTML tag
             l1.setText(resultText.toString());
+
 
         } catch (Exception e) {
             System.out.println(e);
