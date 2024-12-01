@@ -12,7 +12,7 @@ public class miniStatement extends JFrame {
         setLayout(null);
 
         JLabel l1 = new JLabel();
-        l1.setBounds(20, 160, 400, 200);
+        l1.setBounds(20, 130, 400, 400);
         add(l1);
 
         JLabel bank = new JLabel("Indian Bank");
